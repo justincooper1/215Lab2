@@ -19,13 +19,17 @@ private:
     E it;                   // The node's value
     BSTNode* lc;            // Pointer to left child
     BSTNode* rc;            // Pointer to right child
+    bool isThreadedLeft;    // Shows if left pointer is a thread
+    bool isThreadedRight;   // Shows if right pointer is a thread
 
 public:
     // Two constructors -- with and without initial values
-    BSTNode() { lc = rc = NULL; }
-    BSTNode(Key K, E e, BSTNode* l = NULL, BSTNode* r = NULL)
+    BSTNode() { lc = rc = NULL; isThreadedLeft = false; isThreadedRight = false; }
+    BSTNode(Key K, E e, BSTNode* l = NULL, BSTNode* r = NULL, bool leftThread = false, bool rightThread = false)
     {
         k = K; it = e; lc = l; rc = r;
+        isThreadedLeft(leftThread);
+        isThreadedRight(rightThread);
     }
     ~BSTNode() {}             // Destructor
 
@@ -36,11 +40,51 @@ public:
     void setKey(const Key& K) { k = K; }
 
     // Functions to set and return the children
-    inline BSTNode* left() const { return lc; }
-    void setLeft(BinNode<E>* b) { lc = (BSTNode*)b; }
-    inline BSTNode* right() const { return rc; }
-    void setRight(BinNode<E>* b) { rc = (BSTNode*)b; }
+    inline BSTNode* left() const
+    { 
+        return lc;
+    }
+
+    void setLeft(BinNode<E>* b, bool isThread = false)
+    {
+        lc = (BSTNode*)b;
+        isThreadedLeft = isThread;
+    }
+
+    inline BSTNode* right() const
+    {
+        return rc;
+    }
+
+    void setRight(BinNode<E>* b, bool isThread = false)
+    {
+        rc = (BSTNode*)b;
+        isThreadedRight = isThread;
+    }
 
     // Return true if it is a leaf, false otherwise
-    bool isLeaf() { return (lc == NULL) && (rc == NULL); }
+    bool isLeaf()
+    {
+        return (lc == NULL) && (rc == NULL);
+    }
+
+    // Getters
+    bool leftIsThreaded() const
+    {
+        return isThreadedLeft;
+    }
+    bool rightIsThreaded() const
+    {
+        return isThreadedRight;
+    }
+
+    // Setters
+    void setLeftThreaded(bool isThread)
+    {
+        isThreadedLeft = isThread;
+    }
+    void setRightThreaded(bool isThread)
+    {
+        isThreadedRight = isThread;
+    }
 };
