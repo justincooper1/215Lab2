@@ -230,9 +230,33 @@ template <typename Key, typename E>
 void BST<Key, E>::
 printhelp(BSTNode<Key, E>* root, int level) const {
     if (root == NULL) return;           // Empty tree
-    printhelp(root->left(), level + 1);   // Do left subtree
-    for (int i = 0; i < level; i++)         // Indent to level
-        cout << "  ";
-    cout << root->key() << "\n";        // Print node value
-    printhelp(root->right(), level + 1);  // Do right subtree
+    
+    BSTNode<Key, E>* curr = root;
+
+    // Loops through to print every node left to right
+    while (curr != NULL) {
+        // Gets the left node
+        while (curr->left() != NULL && !curr->leftIsThreaded())
+        {
+            curr = curr->left();
+        }
+
+        // Print the node
+        for (int i = 0; i < level; i++)
+        {
+            cout << "  ";
+        }
+        cout << curr->key() << "\n";
+
+        // Moves to right
+        if (curr->rightIsThreaded())
+        {
+            curr = curr->right();
+        }
+        else
+        {
+            curr = curr->right();
+            level++;
+        }
+    }
 }
