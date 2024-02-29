@@ -33,6 +33,9 @@ private:
     E* findhelp(BSTNode<Key, E>*, const Key&) const;
     void printhelp(BSTNode<Key, E>*, int) const;
     void vist(BSTNode<Key, E>*) const;
+    void printInorder() const;
+    void printReverse() const;
+
 
 public:
     BST() { root = NULL; nodecount = 0; }  // Constructor
@@ -257,6 +260,70 @@ printhelp(BSTNode<Key, E>* root, int level) const {
         {
             curr = curr->right();
             level++;
+        }
+    }
+}
+
+template<typename Key, typename E>
+void BST<Key, E>::printInorder() const
+{
+    BSTNode<Key, E>* curr = root;
+
+    // Prints tree in order
+    while (curr != NULL) {
+        if (curr->left() == NULL) {
+            cout << curr->key() << " ";
+            curr = curr->right();
+        }
+        else {
+            BSTNode<Key, E>* pred = curr->left();
+            while (pred->right() != NULL && pred->right() != curr) {
+                pred = pred->right();
+            }
+
+            if (pred->right() == NULL) {
+                pred->setRight(curr, true); // Sets the thread
+                curr = curr->left();
+            }
+            else {
+                pred->setRight(NULL); // Removes the thread
+                cout << curr->key() << " ";
+                curr = curr->right();
+            }
+        }
+    }
+}
+
+template <typename Key, typename E>
+void BST<Key, E>::printReverse() const {
+    BSTNode<Key, E>* curr = root;
+
+    // Right most node
+    while (curr != NULL && curr->right() != NULL) {
+        curr = curr->right();
+    }
+
+    // Goes through the tree in reverse order
+    while (curr != NULL) {
+        if (curr->right() == NULL) {
+            cout << curr->key() << " ";
+            curr = curr->left();
+        }
+        else {
+            BSTNode<Key, E>* succ = curr->right();
+            while (succ->left() != NULL && succ->left() != curr) {
+                succ = succ->left();
+            }
+
+            if (succ->left() == NULL) {
+                succ->setLeft(curr, true); // Sets the thread
+                curr = curr->right();
+            }
+            else {
+                succ->setLeft(NULL); // Removes the thread
+                cout << curr->key() << " ";
+                curr = curr->left();
+            }
         }
     }
 }
