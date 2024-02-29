@@ -22,13 +22,13 @@ public:
 	virtual BinNode* left() const = 0;
 
 	// Set the node's left child
-	virtual void setLeft(BinNode*) = 0;
+	virtual void setLeft(BinNode*, bool) = 0;
 
 	// Return the node's right child
 	virtual BinNode* right() const = 0;
 
 	// Set the node's right child
-	virtual void setRight(BinNode*) = 0;
+	virtual void setRight(BinNode*, bool) = 0;
 
 	// Return true if the node is a leaf, false otherwise
 	virtual bool isLeaf() = 0;

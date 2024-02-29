@@ -33,8 +33,6 @@ private:
     E* findhelp(BSTNode<Key, E>*, const Key&) const;
     void printhelp(BSTNode<Key, E>*, int) const;
     void vist(BSTNode<Key, E>*) const;
-    void printInorder() const;
-    void printReverse() const;
 
 
 public:
@@ -97,6 +95,9 @@ public:
         else printhelp(root, 0);
     }
 
+
+    void printInorder() const;
+    void printReverse() const;
 };
 
 // Visit -- prints out root
@@ -230,38 +231,23 @@ E* BST<Key, E>::findhelp(BSTNode<Key, E>* root,
 
 // Print out a BST
 template <typename Key, typename E>
-void BST<Key, E>::
-printhelp(BSTNode<Key, E>* root, int level) const {
+void BST<Key, E>::printhelp(BSTNode<Key, E>* root, int level) const {
     if (root == NULL) return;           // Empty tree
-    
-    BSTNode<Key, E>* curr = root;
 
-    // Loops through to print every node left to right
-    while (curr != NULL) {
-        // Gets the left node
-        while (curr->left() != NULL && !curr->leftIsThreaded())
-        {
-            curr = curr->left();
-        }
+    // Go through left side of tree
+    if (root->left() != NULL && !root->leftIsThreaded())
+        printhelp(root->left(), level + 1);
 
-        // Print the node
-        for (int i = 0; i < level; i++)
-        {
-            cout << "  ";
-        }
-        cout << curr->key() << "\n";
-
-        // Moves to right
-        if (curr->rightIsThreaded())
-        {
-            curr = curr->right();
-        }
-        else
-        {
-            curr = curr->right();
-            level++;
-        }
+    // Print the node
+    for (int i = 0; i < level; i++)
+    {
+        cout << "  ";
     }
+    cout << root->key() << "\n";
+
+    // Go through right side of tree
+    if (root->right() != NULL && !root->rightIsThreaded())
+        printhelp(root->right(), level + 1);
 }
 
 template<typename Key, typename E>
@@ -269,27 +255,25 @@ void BST<Key, E>::printInorder() const
 {
     BSTNode<Key, E>* curr = root;
 
-    // Prints tree in order
-    while (curr != NULL) {
-        if (curr->left() == NULL) {
-            cout << curr->key() << " ";
-            curr = curr->right();
-        }
-        else {
-            BSTNode<Key, E>* pred = curr->left();
-            while (pred->right() != NULL && pred->right() != curr) {
-                pred = pred->right();
-            }
+    // Go to left most node
+    while (curr != NULL && curr->left() != NULL && !curr->leftIsThreaded()) {
+        curr = curr->left();
+    }
 
-            if (pred->right() == NULL) {
-                pred->setRight(curr, true); // Sets the thread
+    // Go through the tree in order
+    while (curr != NULL) {
+        // Print node
+        cout << curr->key() << "-" << curr->element() << "\n";
+
+        // Move to left most node
+        if (curr->right() != NULL && !curr->rightIsThreaded()) {
+            curr = curr->right();
+            while (curr->left() != NULL && !curr->leftIsThreaded()) {
                 curr = curr->left();
             }
-            else {
-                pred->setRight(NULL); // Removes the thread
-                cout << curr->key() << " ";
-                curr = curr->right();
-            }
+        }
+        else {
+            curr = curr->right();
         }
     }
 }
@@ -298,32 +282,25 @@ template <typename Key, typename E>
 void BST<Key, E>::printReverse() const {
     BSTNode<Key, E>* curr = root;
 
-    // Right most node
-    while (curr != NULL && curr->right() != NULL) {
+    // Go to right most node
+    while (curr != NULL && curr->right() != NULL && !curr->rightIsThreaded()) {
         curr = curr->right();
     }
 
-    // Goes through the tree in reverse order
+    // Go through tree in reverse order
     while (curr != NULL) {
-        if (curr->right() == NULL) {
-            cout << curr->key() << " ";
-            curr = curr->left();
-        }
-        else {
-            BSTNode<Key, E>* succ = curr->right();
-            while (succ->left() != NULL && succ->left() != curr) {
-                succ = succ->left();
-            }
+        // Print node
+        cout << curr->key()<< "-" << curr->element() << "\n";
 
-            if (succ->left() == NULL) {
-                succ->setLeft(curr, true); // Sets the thread
+        // Go right most node
+        if (curr->left() != NULL && !curr->leftIsThreaded()) {
+            curr = curr->left();
+            while (curr->right() != NULL && !curr->rightIsThreaded()) {
                 curr = curr->right();
             }
-            else {
-                succ->setLeft(NULL); // Removes the thread
-                cout << curr->key() << " ";
-                curr = curr->left();
-            }
+        }
+        else {
+            curr = curr->left();
         }
     }
 }

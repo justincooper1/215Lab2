@@ -28,8 +28,8 @@ public:
     BSTNode(Key K, E e, BSTNode* l = NULL, BSTNode* r = NULL, bool leftThread = false, bool rightThread = false)
     {
         k = K; it = e; lc = l; rc = r;
-        isThreadedLeft(leftThread);
-        isThreadedRight(rightThread);
+        isThreadedLeft = leftThread;
+        isThreadedRight = rightThread;
     }
     ~BSTNode() {}             // Destructor
 
